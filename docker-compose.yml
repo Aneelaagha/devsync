@@ -11,12 +11,19 @@ services:
       - devsync_pgdata:/var/lib/postgresql/data
 
   ai-engine:
+  
     build: ./ai-engine
     environment:
       DATABASE_URL: postgresql+psycopg://devsync_user:devsync_pass@db:5432/devsync
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_MODEL: gemini-2.0-flash
+      MOCK_MODE: "true"
+
+
+
 
     ports:
-      - "8080:8080"
+      - "8000:8080"
     depends_on:
       - db
 
