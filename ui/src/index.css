@@ -1,11 +1,17 @@
+/* index.css — clean “app layout” baseline (fixes huge side space + keeps dark mode) */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
+  /* Keep OS-level form styling consistent */
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+
+  /* Default: dark theme */
   background-color: #242424;
+  color: rgba(255, 255, 255, 0.87);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +19,90 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* ✅ IMPORTANT: remove flex centering from body (this was causing the big empty space look) */
+html,
+body {
+  height: 100%;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  /* App layout baseline */
+  display: block; /* ✅ not flex */
+  place-items: unset; /* ✅ not centered */
 }
 
+/* Ensure the React root can take full width/height if you want */
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Links */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: none;
+}
+a:hover {
+  color: #535bf2;
+  text-decoration: underline;
+}
+
+/* Headings */
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 2.2rem; /* more “app-like” than the huge Vite default */
+  line-height: 1.15;
+  margin: 0 0 0.75rem 0;
 }
 
+/* Buttons (keep your nice defaults) */
 button {
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: inherit;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, transform 0.05s ease;
 }
 button:hover {
   border-color: #646cff;
 }
+button:active {
+  transform: translateY(1px);
+}
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 3px solid rgba(100, 108, 255, 0.6);
+  outline-offset: 2px;
 }
 
+/* Inputs baseline */
+textarea,
+input,
+select {
+  font-family: inherit;
+}
+
+/* Light mode support */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
     background-color: #ffffff;
+    color: #213547;
   }
+
+  button {
+    background-color: #f3f4f6;
+  }
+
   a:hover {
     color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
   }
 }
