@@ -9,17 +9,18 @@ import json
 from gemini_client import generate_review
 from db import ping_db, init_db, save_review, list_reviews
 
-# ✅ Load .env BEFORE reading any env vars
+# Load environment variables
 load_dotenv()
 
 app = FastAPI(title="DevSync AI Engine", version="0.1.0")
 
-# ✅ CORS (UI runs on localhost:5173)
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://devsync-seven.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -54,39 +55,36 @@ def get_reviews(limit: int = 10):
 def ai_review(req: ReviewRequest):
     diff_text = (req.diff or "").strip()
 
-    # ✅ MOCK MODE (for demos / quota exhaustion)
+    # Mock mode for demos
     if os.getenv("MOCK_MODE", "false").lower() == "true":
         summary = "This change adds a print statement."
         risks = [
-            "Leaving debug prints in production code can clutter logs and leak information.",
+            "Leaving debug prints in production code can clutter logs and leak information."
         ]
         improvements = [
             "Use structured logging instead of print().",
             "Add a small test to verify expected behavior.",
-            "Remove debug output before merging to production.",
+            "Remove debug output before merging."
         ]
-        model_used = "mock"
 
-        save_review(summary, risks, improvements, model_used)
+        save_review(summary, risks, improvements, "mock")
 
         return {
             "summary": summary,
             "risks": risks,
             "improvements": improvements,
-            "raw": None,
-            "model": model_used,
+            "model": "mock",
             "type": "code-review",
         }
 
-    # ---------- Gemini Path ----------
     prompt = f"""
 You are an AI code review agent.
 
-Return ONLY valid JSON (no markdown, no backticks) with this exact schema:
+Return ONLY valid JSON with this schema:
 {{
   "summary": "string",
-  "risks": ["string", "..."],
-  "improvements": ["string", "..."]
+  "risks": ["string"],
+  "improvements": ["string"]
 }}
 
 Code diff:
@@ -94,49 +92,36 @@ Code diff:
 """.strip()
 
     try:
-        # ✅ generate_review now should return (raw_text, model_name)
         raw_text, model_name = generate_review(prompt)
-
-        # ✅ sometimes models add leading/trailing whitespace; strip before json parse
         data = json.loads(raw_text.strip())
 
         summary = data.get("summary", "")
         risks = data.get("risks", [])
         improvements = data.get("improvements", [])
-        model_used = model_name  # ✅ shows gemini-3-pro-preview, etc.
 
-        save_review(summary, risks, improvements, model_used)
+        save_review(summary, risks, improvements, model_name)
 
         return {
             "summary": summary,
             "risks": risks,
             "improvements": improvements,
             "raw": raw_text,
-            "model": model_used,
+            "model": model_name,
             "type": "code-review",
         }
 
     except Exception as e:
-        # ✅ Fallback response (still demo-safe)
-        summary = "This change adds a print statement."
-        risks = [
-            "Leaving debug prints in production code can clutter logs and leak information.",
-        ]
-        improvements = [
-            "Use structured logging instead of print().",
-            "Add a small test to verify expected behavior.",
-            "Remove debug output before merging to production.",
-        ]
-        model_used = f"fallback:{type(e).__name__}"
+        summary = "Fallback review generated."
+        risks = ["Model response could not be parsed."]
+        improvements = ["Check prompt formatting and model output."]
 
-        save_review(summary, risks, improvements, model_used)
+        save_review(summary, risks, improvements, "fallback")
 
         return {
             "summary": summary,
             "risks": risks,
             "improvements": improvements,
-            "raw": None,
-            "model": model_used,
+            "model": "fallback",
             "error": str(e),
             "type": "code-review",
         }
