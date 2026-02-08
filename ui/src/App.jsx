@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { diffLines } from "diff";
 import devsyncIcon from "./assets/devsync-logo.png"; // rename file if needed
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
 // ✅ Put icon-only file here: ui/public/devsync-icon.png
 const DEV_SYNC_LOGO = devsyncIcon;
