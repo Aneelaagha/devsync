@@ -22,8 +22,7 @@ Analyze Git diffs, detect risks and secrets and get actionable AI feedback befor
   <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="36" />
   <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg" width="36" />
   <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" width="36" />
-  <img src="https://www.gstatic.com/aihub/tfhub/supported_models/gemini_logo.svg" width="36" />
-  <img src="https://assets.vercel.com/image/upload/front/favicon/vercel/57x57.png" width="36" />
+  
 </p>
 
 ---
