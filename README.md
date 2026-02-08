@@ -1,16 +1,36 @@
-🚀 DevSync
+<div align="center"> <img src="ui/src/assets/devsync-logo.png" width="90" />
+DevSync
+
 Your AI teammate before CI fails
-DevSync is a full-stack AI-powered code review platform that analyzes Git diffs, detects risks and secrets and provides actionable feedback before code reaches CI/CD.
-🔗 Live Demo: https://devsync-seven.vercel.app/
 
-🧠 Why DevSync?
+Analyze Git diffs, detect risks and secrets and get actionable AI feedback before code reaches CI/CD.
 
-Modern development moves fast but small mistakes like hardcoded secrets risky changes or missing checks can break builds cause outages or introduce security flaws.
-DevSync acts like an AI teammate, reviewing code changes early and helping developers ship safer cleaner code with confidence.
+</div>
+🧰 Built With
+<p align="left"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" width="36" /> <img src="https://vitejs.dev/logo.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" width="36" /> <img src="https://www.gstatic.com/aihub/tfhub/supported_models/gemini_logo.svg" width="36" /> <img src="https://assets.vercel.com/image/upload/front/favicon/vercel/57x57.png" width="36" /> </p>
+🧠 Description
 
-🧰 Tech Stack
-<p align="left"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" width="36" /> <img src="https://vitejs.dev/logo.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg" width="36" /> <img src="https://www.gstatic.com/aihub/tfhub/supported_models/gemini_logo.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg" width="36" /> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/github/github-original.svg" width="36" /> <img src="https://assets.vercel.com/image/upload/front/favicon/vercel/57x57.png" width="36" /> <img src="https://avatars.githubusercontent.com/u/36424661?s=200&v=4" width="36" /> </p>
+DevSync is an AI-powered code review platform built to help developers catch risky changes early. By analyzing Git diffs before merge or CI execution, DevSync identifies potential bugs, security issues and hardcoded secrets while providing clear explanations and a risk score for every change.
+
+The goal is simple. Ship safer code with more confidence and less guesswork.
 
 ⚙️ How It Works
 
-The user pastes a Git diff into the DevSync interface, which is sent to the backend API for processing. The FastAPI service forwards the request to Gemini, which analyzes the code changes for risks secrets and improvements. The backend then returns a structured review with a risk score that is displayed in a side-by-side diff view on the frontend.
+The user pastes a Git diff into the DevSync interface.
+The frontend sends the diff to the backend API.
+The FastAPI service forwards the request to Gemini for analysis.
+Gemini evaluates the code for risks secrets and improvements.
+The backend returns a structured review with a risk score.
+The frontend displays the results in a side-by-side diff view.
+
+✨ Features
+
+AI-powered Git diff analysis
+
+Risk scoring for code changes
+
+Secret detection with masking toggle
+
+Adjustable review strictness and context
+
+Exportable reviews in Markdown format
