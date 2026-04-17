@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from webhook import router as webhook_router
 
 import os
 import json
@@ -13,6 +14,7 @@ from db import ping_db, init_db, save_review, list_reviews
 load_dotenv()
 
 app = FastAPI(title="DevSync AI Engine", version="0.1.0")
+app.include_router(webhook_router)
 
 # CORS configuration
 app.add_middleware(
@@ -125,3 +127,31 @@ Code diff:
             "error": str(e),
             "type": "code-review",
         }
+
+# ---------- GitHub App ----------
+async def analyze_diff(diff: str) -> dict:
+    prompt = f"""
+You are an AI code review agent.
+
+Return ONLY valid JSON with this schema:
+{{
+  "summary": "string",
+  "risks": ["string"],
+  "improvements": ["string"],
+  "risk_score": 5.0
+}}
+
+Code diff:
+{diff}
+""".strip()
+
+    try:
+        raw_text, _ = generate_review(prompt)
+        data = json.loads(raw_text.strip())
+        findings = [{"line": 1, "message": r} for r in data.get("risks", [])]
+        return {
+            "risk_score": float(data.get("risk_score", 5.0)),
+            "findings": findings
+        }
+    except Exception:
+        return {"risk_score": 5.0, "findings": []}
