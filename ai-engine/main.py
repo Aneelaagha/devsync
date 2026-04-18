@@ -129,9 +129,26 @@ Code diff:
         }
 
 # ---------- GitHub App ----------
-async def analyze_diff(diff: str) -> dict:
+async def analyze_diff(diff: str, config=None) -> dict:
+    from config import DevSyncConfig
+    cfg = config or DevSyncConfig()
+
+    secret_hint = ""
+    if cfg.secret_patterns:
+        secret_hint = f"Also flag any occurrences of these patterns as secrets: {', '.join(cfg.secret_patterns)}."
+
+    context_hint = f"\nExtra context about this repo: {cfg.context}" if cfg.context else ""
+
+    strictness_hint = {
+        1: "Be lenient, only flag critical issues.",
+        2: "Be fairly lenient, flag important issues only.",
+        3: "Apply standard review strictness.",
+        4: "Be strict, flag minor issues too.",
+        5: "Be very strict, flag everything suspicious.",
+    }.get(cfg.strictness, "Apply standard review strictness.")
+
     prompt = f"""
-You are an AI code review agent.
+You are an AI code review agent. {strictness_hint}{context_hint}
 
 Return ONLY valid JSON with this schema:
 {{
@@ -140,6 +157,8 @@ Return ONLY valid JSON with this schema:
   "improvements": ["string"],
   "risk_score": 5.0
 }}
+
+{secret_hint}
 
 Code diff:
 {diff}
