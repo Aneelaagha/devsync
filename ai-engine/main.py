@@ -53,6 +53,11 @@ def health_check():
 def get_reviews(limit: int = 10):
     return {"items": list_reviews(limit)}
 
+@app.get("/dashboard")
+def get_dashboard():
+    from db import get_dashboard_stats
+    return get_dashboard_stats()
+
 @app.post("/ai/review")
 def ai_review(req: ReviewRequest):
     diff_text = (req.diff or "").strip()

@@ -3,6 +3,7 @@ import hashlib, hmac, os
 from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
 from github_client import GithubClient
 from config import load_config
+from db import save_review
 
 router = APIRouter()
 WEBHOOK_SECRET = os.environ["GITHUB_WEBHOOK_SECRET"]
@@ -18,6 +19,7 @@ async def handle_pr(payload: dict):
     pr_num  = payload["pull_request"]["number"]
     install = payload["installation"]["id"]
     sha     = payload["pull_request"]["head"]["sha"]
+    author  = payload["pull_request"]["user"]["login"]
 
     gh = GithubClient(install)
     headers = await gh._headers()
@@ -47,6 +49,18 @@ async def handle_pr(payload: dict):
     # Run AI analysis with config context
     from main import analyze_diff
     result = await analyze_diff(diff, config)
+
+    # Save to database for dashboard
+    save_review(
+        summary=result.get("summary", ""),
+        risks=[f["message"] for f in result.get("findings", [])],
+        improvements=[],
+        model="gemini",
+        risk_score=result["risk_score"],
+        repo=repo,
+        author=author,
+        pr_number=pr_num,
+    )
 
     # Post inline review comments
     comments = [
