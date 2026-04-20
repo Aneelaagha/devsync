@@ -1,7 +1,7 @@
 <div align="center">
 <img src="ui/src/assets/devsync-logo.png" width="90" />
 
-# DevSync
+# Devsync
 **Your AI teammate before CI fails**
 
 Analyze Git diffs, detect risks and secrets and get actionable AI feedback before code reaches CI/CD.
